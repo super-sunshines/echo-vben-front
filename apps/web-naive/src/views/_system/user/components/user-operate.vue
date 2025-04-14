@@ -8,24 +8,19 @@ import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm, z } from '#/adapter/form';
 import { message } from '#/adapter/naive';
-import {
-  addSysUser,
-  detailSysUser,
-  treeListSysDepartment,
-  updateSysUser,
-} from '#/api';
+import { addSysUser, detailSysUser, updateSysUser } from '#/api';
 import { getSysRolePageList } from '#/api/core/system/role';
 import XSkeleton from '#/components/XSkeleton.vue';
-import { SysDisableTagProp, tagPropToOptions } from '#/constants';
+import { SysDictCodeEnum } from '#/constants';
 import useBoolean from '#/hook/use-boolean';
+
+const props = defineProps<{
+  treeSysDepartment: Array<SysDepartmentApi.SysDepartmentRecord>;
+}>();
 
 // 定义emit事件及其参数类型
 const emit = defineEmits<{
   (event: 'update:success'): void;
-}>();
-
-const props = defineProps<{
-  treeSysDepartment: Array<SysDepartmentApi.SysDepartmentRecord>;
 }>();
 
 const model = ref<SysUserApi.SysUserRecord>({
@@ -78,7 +73,15 @@ const [Form, formApi] = useVbenForm({
       component: 'Input',
       componentProps: {
         placeholder: '请输入',
-        disabled: true,
+      },
+      dependencies: {
+        triggerFields: ['username'],
+        componentProps: () => {
+          return {
+            placeholder: '请输入',
+            disabled: !isAdd.value,
+          };
+        },
       },
       fieldName: 'username',
       label: '登录账号',
@@ -109,7 +112,7 @@ const [Form, formApi] = useVbenForm({
       },
       fieldName: 'phone',
       label: '手机号',
-      rules: z.string().default('默认值').optional(),
+      rules: z.string().default('').optional(),
     },
     {
       component: 'TreeSelect',
@@ -136,21 +139,16 @@ const [Form, formApi] = useVbenForm({
     },
     {
       component: 'Input',
-      // 对应组件的参数
-      componentProps: {
-        options: tagPropToOptions(SysDisableTagProp),
-      },
       // 字段名
       fieldName: 'email',
       // 界面显示的label
       label: '邮箱',
-      rules: z.string().email('请输入正确的邮箱'),
     },
     {
-      component: 'Select',
+      component: 'DictSelect',
       // 对应组件的参数
       componentProps: {
-        options: tagPropToOptions(SysDisableTagProp),
+        code: SysDictCodeEnum.SYS_COMMENT_STATUS,
       },
       fieldName: 'status',
       label: '用户状态',

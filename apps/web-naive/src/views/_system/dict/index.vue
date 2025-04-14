@@ -120,7 +120,6 @@ const onTreeSelectTemplate = (v: string[]) => {
 const copyCodeEnum = (type: number) => {
   listDictCodeList().then((res: Array<{ code: string; name: string }>) => {
     let targetCopy = '';
-
     if (type === 1) {
       // Type = 1: 生成 Go 常量
       targetCopy += 'const (\n';
@@ -146,7 +145,7 @@ const copyCodeEnum = (type: number) => {
     }
 
     // 复制到剪贴板
-    copy(targetCopy);
+    onCopy(targetCopy);
   });
 };
 

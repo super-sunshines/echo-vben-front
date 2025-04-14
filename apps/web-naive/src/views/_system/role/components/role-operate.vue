@@ -207,9 +207,7 @@ defineComponent({ name: 'SysRoleOperate' });
             v-model:value="model.updateStrategy"
           />
         </NFormItem>
-        <NFormItem label="角色首页" path="homePath">
-          <NInput v-model:value="model.homePath" />
-        </NFormItem>
+
         <NFormItem label="是否启用">
           <NSwitch v-model:value="model.enableStatus" />
         </NFormItem>

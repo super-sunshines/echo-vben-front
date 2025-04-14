@@ -13,11 +13,13 @@ import { message } from '#/adapter/naive';
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import {
   getSysRolePageList,
+  lockUserApi,
   pageListSysUser,
   treeListSysDepartment,
+  unlockUserApi,
 } from '#/api';
 import { SysDepartmentTree } from '#/components';
-import { ColPageProps } from '#/constants';
+import { ColPageProps, CommentEnum, SysDictCodeEnum } from '#/constants';
 import { useComponentRef } from '#/hook/use-component-ref';
 
 import SysUserOperate from './components/user-operate.vue';
@@ -75,12 +77,9 @@ const gridOptions: VxeGridProps<SysUserApi.SysUserRecord> = {
       width: 200,
       title: '状态',
       cellRender: {
-        name: 'CellTag',
+        name: 'CellDictTag',
         props: {
-          options: [
-            { label: '正常', value: 1 },
-            { label: '封禁', value: 2 },
-          ],
+          code: SysDictCodeEnum.SYS_COMMENT_STATUS,
         },
       },
     },
@@ -137,6 +136,24 @@ const onTreeSelectTemplate = (v: string[]) => {
   pageListSysUserParams.value.departmentId = Number(select);
   gridApi.reload();
 };
+
+const onUnLockUserBtnClick = async (id: number) => {
+  await unlockUserApi(id).then((res) => {
+    if (res) {
+      message.success('解锁成功');
+      gridApi.reload();
+    }
+  });
+};
+
+const onLockUserBtnClick = async (id: number) => {
+  await lockUserApi(id).then((res) => {
+    if (res) {
+      message.success('封禁成功');
+      gridApi.reload();
+    }
+  });
+};
 const [Grid, gridApi] = useVbenVxeGrid({ gridOptions });
 </script>
 <template>
@@ -166,6 +183,18 @@ const [Grid, gridApi] = useVbenVxeGrid({ gridOptions });
             @click="() => sysUserOperateRef?.edit(row.id)"
           >
             编辑
+          </NButton>
+          <NButton
+            tertiary
+            type="warning"
+            @click="
+              () =>
+                row.status !== CommentEnum.EnableStatus
+                  ? onUnLockUserBtnClick(row.id)
+                  : onLockUserBtnClick(row.id)
+            "
+          >
+            {{ row.status !== CommentEnum.EnableStatus ? '解锁' : '封禁' }}
           </NButton>
           <NPopconfirm @positive-click="() => {}">
             <template #trigger>

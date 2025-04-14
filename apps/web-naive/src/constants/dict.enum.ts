@@ -1,5 +1,10 @@
 export enum SysDictCodeEnum {
   /**
+   * 通用状态
+   */
+  SYS_COMMENT_STATUS = 'sys-comment-status',
+
+  /**
    * 字典所属模块
    */
   SYS_DICT_MODULE = 'sys-dict-module',

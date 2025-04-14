@@ -16,8 +16,8 @@ import { deleteSysMenu, getSysMenuList } from '#/api/core/system/menu';
 import { MenuType, SysMenuTypeTagProp, tagPropToOptions } from '#/constants';
 import useBoolean from '#/hook/use-boolean';
 import { useComponentRef } from '#/hook/use-component-ref';
-
 import { NTagRender } from '#/utils';
+
 import SysMenuOperate from './components/menu-operate.vue';
 import SysPermissionOperate from './components/permission-operate.vue';
 
@@ -179,7 +179,6 @@ initSysMenuData();
       :data="menuTreeList"
       :row-key="(row) => row.id"
       :single-line="false"
-      default-expand-all
       striped
       @update:checked-row-keys="handleCheck"
     />

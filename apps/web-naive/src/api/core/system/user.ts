@@ -123,3 +123,16 @@ export async function deleteSysUser(ids: number[]) {
 export async function getUserInfoApi() {
   return requestClient.get<UserInfo>('/user/info');
 }
+
+/**
+ *  解锁用户
+ */
+export async function unlockUserApi(id: number) {
+  return requestClient.put<boolean>(`/system/user/unlock/${id}`);
+}
+/**
+ *  封禁用户
+ */
+export async function lockUserApi(id: number) {
+  return requestClient.put<boolean>(`/system/user/lock/${id}`);
+}
