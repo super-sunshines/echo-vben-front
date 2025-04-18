@@ -26,6 +26,7 @@
     "#/*": "./src/*"
   },
   "dependencies": {
+    "@iconify/json": "catalog:",
     "@vben/access": "workspace:*",
     "@vben/common-ui": "workspace:*",
     "@vben/constants": "workspace:*",
@@ -41,14 +42,13 @@
     "@vben/types": "workspace:*",
     "@vben/utils": "workspace:*",
     "@vueuse/core": "catalog:",
+    "cos-js-sdk-v5": "catalog:",
+    "dayjs": "catalog:",
     "naive-ui": "catalog:",
     "pinia": "catalog:",
-    "vue": "catalog:",
-    "vue-router": "catalog:",
-    "cos-js-sdk-v5": "catalog:",
     "uuid": "catalog:",
-    "dayjs": "catalog:",
-    "@iconify/json": "catalog:"
+    "vue": "catalog:",
+    "vue-router": "catalog:"
   },
   "devDependencies": {
     "unplugin-auto-import": "catalog:",

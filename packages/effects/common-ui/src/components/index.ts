@@ -1,5 +1,3 @@
-export * from '@vben-core/form-ui';
-export * from '@vben-core/popup-ui';
 export * from './api-component';
 export * from './captcha';
 export * from './col-page';
@@ -11,6 +9,8 @@ export * from './loading';
 export * from './page';
 export * from './resize';
 export * from './tippy';
+export * from '@vben-core/form-ui';
+export * from '@vben-core/popup-ui';
 
 // 给文档用
 export {

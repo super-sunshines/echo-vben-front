@@ -13,6 +13,8 @@ import {
 } from '@vben/request';
 import { useAccessStore } from '@vben/stores';
 
+import qs from 'qs';
+
 import { message } from '#/adapter/naive';
 import { useAuthStore } from '#/store';
 
@@ -108,15 +110,14 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
       message.error(errorMessage || msg);
     }),
   );
-
   return client;
 }
-
 export const requestClient = createRequestClient(apiURL, {
   responseReturn: 'data',
   headers: {
     'app-platform-key': import.meta.env.VITE_APP_PLATFORM_KEY,
   },
+  paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'repeat' }),
 });
 
 export const baseRequestClient = new RequestClient({ baseURL: apiURL });

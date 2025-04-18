@@ -1,7 +1,6 @@
-import XEmpty from './XEmpty.vue';
-
-import XSkeleton from './XSkeleton.vue';
-import XTitle from './XTitle.vue';
-import XToggle from './XToggle.vue';
 export * from './system';
-export { XEmpty, XSkeleton, XTitle, XToggle };
+
+export { default as XEmpty } from './XEmpty.vue';
+export { default as XSkeleton } from './XSkeleton.vue';
+export { default as XTitle } from './XTitle.vue';
+export { default as XToggle } from './XToggle.vue';
