@@ -13,6 +13,8 @@ import {
 } from '@vben/request';
 import { useAccessStore } from '@vben/stores';
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import qs from 'qs';
 
 import { message } from '#/adapter/naive';

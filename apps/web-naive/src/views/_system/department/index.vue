@@ -11,9 +11,9 @@ import { NButton, NButtonGroup, NDataTable, NSpace } from 'naive-ui';
 
 import { message } from '#/adapter/naive';
 import { treeListSysDepartment } from '#/api';
+import { NTimeFormatRender } from '#/components';
 import useBoolean from '#/hook/use-boolean';
 import { useComponentRef } from '#/hook/use-component-ref';
-import { NTimeFormatRender } from '#/utils';
 import DepartmentOperate from '#/views/_system/department/components/department-operate.vue';
 
 const departmentOperateRef = useComponentRef(DepartmentOperate);

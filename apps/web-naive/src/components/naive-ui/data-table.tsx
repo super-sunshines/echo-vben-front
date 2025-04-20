@@ -1,16 +1,19 @@
+import type { Ref } from 'vue';
+
 import type { TagPropsType } from '#/store';
+
+import { isRef } from 'vue';
+
 import dayjs from 'dayjs';
+import { NSpace, NTag } from 'naive-ui';
 
 export const NTimeFormatRender = (row: any, column: string) => {
   const time = row[column];
   return time ? dayjs(time).format('YYYY-MM-DD HH:mm:ss') : '';
 };
 
-import { NSpace, NTag } from 'naive-ui';
-import { isRef, type Ref } from 'vue';
-
 export interface RenderTagOptions {
-  value: (string | number) | (string | number)[] | undefined;
+  value: (number | string)[] | (number | string) | undefined;
   valueKey?: string;
   labelKey?: string;
   options?: Array<Record<string, any>> | Ref<Array<Record<string, any>>>;
@@ -40,7 +43,7 @@ export const NTagRender = ({
   );
 
   if (Array.isArray(value)) {
-    filterList = value.map((itemCode: string | number) => {
+    filterList = value.map((itemCode: number | string) => {
       const option = selectOptionsMap.get(itemCode) ?? {
         [labelKey]: '',
         [valueKey]: '',
@@ -59,7 +62,7 @@ export const NTagRender = ({
       </NTag>
     );
   }
-  if (!filterList.length) {
+  if (filterList.length === 0) {
     return <NTag>{nullText}</NTag>;
   }
 
@@ -68,7 +71,7 @@ export const NTagRender = ({
       {filterList.map((item: string, index: number) => {
         const key = Array.isArray(value) ? value[index] : value;
         const props =
-          key !== undefined ? tagProps[key as string | number] || {} : {};
+          key === undefined ? {} : tagProps[key as number | string] || {};
         return (
           <NTag key={index} {...(needCoverProps ? coverTagProps : props)}>
             {item}
