@@ -16,8 +16,63 @@ export const useAuthStore = defineStore('auth', () => {
   const accessStore = useAccessStore();
   const userStore = useUserStore();
   const router = useRouter();
-
   const loginLoading = ref(false);
+
+  /**
+   * token登录
+   * Asynchronously handle the login process
+   * @param accessToken token
+   * @param onSuccess
+   */
+  async function accessTokenLogin(
+    accessToken: string,
+    onSuccess?: () => Promise<void> | void,
+  ) {
+    // router.clearRoutes();
+    // 异步处理用户登录操作并获取 accessToken
+    let userInfo: null | UserInfo = null;
+    try {
+      loginLoading.value = true;
+
+      // 如果成功获取到 accessToken
+      if (accessToken) {
+        // 将 accessToken 存储到 accessStore 中
+        accessStore.setAccessToken(accessToken);
+
+        // 获取用户信息并存储到 accessStore 中
+        const [fetchUserInfoResult, accessCodes] = await Promise.all([
+          fetchUserInfo(),
+          getAccessCodesApi(),
+        ]);
+        userInfo = fetchUserInfoResult;
+
+        userStore.setUserInfo(userInfo);
+        accessStore.setAccessCodes(accessCodes);
+
+        if (accessStore.loginExpired) {
+          accessStore.setLoginExpired(false);
+        } else {
+          onSuccess
+            ? await onSuccess?.()
+            : await router.push(userInfo.homePath || DEFAULT_HOME_PATH);
+        }
+
+        if (userInfo?.realName) {
+          notification.success({
+            content: $t('authentication.loginSuccess'),
+            description: `${$t('authentication.loginSuccessDesc')}:${userInfo?.realName}`,
+            duration: 3000,
+          });
+        }
+      }
+    } finally {
+      loginLoading.value = false;
+    }
+
+    return {
+      userInfo,
+    };
+  }
 
   /**
    * 异步处理登录操作
@@ -109,6 +164,7 @@ export const useAuthStore = defineStore('auth', () => {
     $reset,
     authLogin,
     fetchUserInfo,
+    accessTokenLogin,
     loginLoading,
     logout,
   };

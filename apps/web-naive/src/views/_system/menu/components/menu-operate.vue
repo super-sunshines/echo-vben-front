@@ -74,7 +74,7 @@ const isAdd = computed(() => operateId.value === 0);
 
 const rules: FormRules = {};
 const indexVueFiles = Object.keys(
-  import.meta.glob('/src/views/**/index.vue', {
+  import.meta.glob('/src/views/**/**.vue', {
     eager: true,
   }),
 )

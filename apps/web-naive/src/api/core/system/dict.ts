@@ -76,7 +76,12 @@ export namespace SysDictApi {
     /**
      * 字典状态
      */
-    status: number;
+    enableStatus: number;
+
+    /**
+     * 正则表达式
+     */
+    regular: string;
 
     children: SysDictChildRecord[];
   }

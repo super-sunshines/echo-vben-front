@@ -82,19 +82,26 @@ const createColumns: DataTableColumns<RowData> = [
       return dictData.value?.valueType === SysDictValueTypeEnum.Number ? (
         <NInputNumber
           min={1}
-          onUpdateValue={(value) =>
+          onUpdateValue={(value) => {
+            const regExp = new RegExp(dictData.value?.regular as string);
+            if (!regExp.test(`${value}`)) {
+              message.error('字典值正则匹配不符合');
+              return;
+            }
             dictDataChildren.value[index] &&
-            (dictDataChildren.value[index].value = `${value}`)
-          }
+              (dictDataChildren.value[index].value = `${value}`);
+          }}
           size={'small'}
           value={Number(row.value)}
         ></NInputNumber>
       ) : (
         <NInput
-          onUpdateValue={(value) =>
-            dictDataChildren.value[index] &&
-            (dictDataChildren.value[index].value = value)
-          }
+          onUpdateValue={(value) => {
+            const regExp = new RegExp(dictData.value?.regular as string);
+            if (!regExp.test(`${value}`)) {
+              message.error('字典值正则匹配不符合');
+            }
+          }}
           size={'small'}
           value={`${row.value}`}
         ></NInput>

@@ -1,6 +1,24 @@
+import type { AuthApi } from './auth';
+
 import { requestClient } from '#/api/request';
 
 export namespace CbTencentCloudApi {
+  /**
+   * sts.CredentialError
+   */
+  export interface StsCredentialError {
+    Code?: string;
+    Message?: string;
+    RequestId?: string;
+  }
+  /**
+   * sts.Credentials
+   */
+  export interface StsCredentials {
+    TmpSecretId: string;
+    TmpSecretKey: string;
+    Token: string;
+  }
   /**
    * services.TencentCloudCosTmpKey
    */
@@ -26,22 +44,10 @@ export namespace CbTencentCloudApi {
     CdnUrl: string;
   }
 
-  /**
-   * sts.Credentials
-   */
-  export interface StsCredentials {
-    TmpSecretId: string;
-    TmpSecretKey: string;
-    Token: string;
-  }
-
-  /**
-   * sts.CredentialError
-   */
-  export interface StsCredentialError {
-    Code?: string;
-    Message?: string;
-    RequestId?: string;
+  export interface WorkWechatConfigSignature {
+    timestamp: number;
+    nonceStr: string;
+    signature: string;
   }
 }
 
@@ -52,4 +58,29 @@ export async function getTencentCloudCosTemKey() {
   return requestClient.get<CbTencentCloudApi.TencentCloudCosTmpKey>(
     '/tencent/cloud/cos/tem-key',
   );
+}
+
+/**
+ * 获取企业微信配置签名
+ * @param url 授权地址
+ * @returns 签名配置
+ */
+export async function getWorkWechatConfigSignature(url: string) {
+  return requestClient.get<CbTencentCloudApi.WorkWechatConfigSignature>(
+    `/work-wechat/signature?url=${url}`,
+  );
+}
+
+/**
+ * 使用临时code登录
+ * @param code 企业微信登录临时code
+ * @returns  登录结果
+ */
+
+export async function loginByWorkWechat(code: string) {
+  return requestClient.get<AuthApi.LoginResult>('/work-wechat/login', {
+    params: {
+      code,
+    },
+  });
 }

@@ -13,10 +13,10 @@ import { NButton, NDataTable, NPopconfirm, NSpace, NTag } from 'naive-ui';
 
 import { message } from '#/adapter/naive';
 import { deleteSysMenu, getSysMenuList } from '#/api/core/system/menu';
+import { NTagRender } from '#/components';
 import { MenuType, SysMenuTypeTagProp, tagPropToOptions } from '#/constants';
 import useBoolean from '#/hook/use-boolean';
 import { useComponentRef } from '#/hook/use-component-ref';
-import { NTagRender } from '#/utils';
 
 import SysMenuOperate from './components/menu-operate.vue';
 import SysPermissionOperate from './components/permission-operate.vue';
@@ -147,7 +147,7 @@ initSysMenuData();
 <template>
   <Page
     auto-content-height
-    description="对后台管理Web的左侧的菜单进行管理，修改、隐藏、删除、更新等..."
+    description="对后台管理Web的左侧的菜单进行管理,修改、隐藏、删除、更新等..."
     title="系统目录管理"
   >
     <template #extra>

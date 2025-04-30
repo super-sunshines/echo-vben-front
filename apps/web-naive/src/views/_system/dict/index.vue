@@ -15,12 +15,17 @@ import {
   NCard,
   NPopconfirm,
   NSpace,
+  NSwitch,
   NTree,
 } from 'naive-ui';
 
 import { message } from '#/adapter/naive';
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { listDictCodeList, pageListSysDict } from '#/api/core/system/dict';
+import {
+  listDictCodeList,
+  pageListSysDict,
+  updateSysDict,
+} from '#/api/core/system/dict';
 import { ColPageProps, SysDictCodeEnum } from '#/constants';
 import { useComponentRef } from '#/hook/use-component-ref';
 import { useDictStore } from '#/store/dict';
@@ -29,6 +34,14 @@ import DictOperate from './components/item-operate.vue';
 
 const sysDictOperateRef = useComponentRef(DictOperate);
 const selectDictModuleId = ref<number>();
+
+const onEnableChange = (row: SysDictApi.SysDictRecord, val: number) => {
+  row.enableStatus = val;
+  message.loading('数据提交中请稍后！');
+  updateSysDict(row.id, row).finally(() => {
+    message.destroyAll();
+  });
+};
 
 const gridOptions: VxeGridProps<SysDictApi.SysDictRecord> = {
   columns: [
@@ -40,7 +53,25 @@ const gridOptions: VxeGridProps<SysDictApi.SysDictRecord> = {
       minWidth: 300,
       slots: { default: 'code-link' },
     },
-    // { field: 'status', width: 150, title: '状态' },
+    {
+      field: 'enableStatus',
+      width: 150,
+      title: '状态',
+      slots: {
+        default: ({ row }) => {
+          return (
+            <div class={'my-2'}>
+              <NSwitch
+                checkedValue={1}
+                onUpdateValue={(val) => onEnableChange(row, val)}
+                uncheckedValue={2}
+                value={row.enableStatus}
+              ></NSwitch>
+            </div>
+          );
+        },
+      },
+    },
     {
       field: 'module',
       width: 200,
@@ -50,6 +81,7 @@ const gridOptions: VxeGridProps<SysDictApi.SysDictRecord> = {
         props: { code: SysDictCodeEnum.SYS_DICT_MODULE },
       },
     },
+    { field: 'regular', title: '正则', minWidth: 200 },
     { field: 'describe', title: '描述', minWidth: 200 },
     {
       field: 'updateTime',

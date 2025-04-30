@@ -1,27 +1,29 @@
-import { getTencentCloudCosTemKey } from '#/api/core/system/tencent.cloud';
+import type { Ref } from 'vue';
+
+import { ref } from 'vue';
+
 import COS from 'cos-js-sdk-v5';
 import dayjs from 'dayjs';
 import { v4 as UUID } from 'uuid';
-import { ref, type Ref } from 'vue';
+
+import { getTencentCloudCosTemKey } from '#/api';
 
 interface Task {
   fileName: string;
   taskId: string;
 }
-
+const Bucket = import.meta.env.VITE_APP_TENCENT_COS_BUCKET as string;
+const Region = import.meta.env.VITE_APP_TENCENT_COS_REGION as string;
+if (!Bucket || !Bucket) {
+  throw new Error('请配置腾讯云COS');
+} else {
+  window.console.table({ Bucket, Region });
+}
 export function useUpload() {
-  let CdnUrl = '';
-  let Bucket = 'wechat-app-1302852867';
-  let Region = 'ap-shanghai';
-
   const taskList: Ref<Task[]> = ref([]);
   const cosSdk = new COS({
-    getAuthorization: async function (_, callback) {
+    async getAuthorization(_, callback) {
       const data = await getTencentCloudCosTemKey();
-      CdnUrl = data.CdnUrl;
-      Bucket = data.Bucket;
-      Region = data.Region;
-
       callback({
         TmpSecretId: data.Credentials.TmpSecretId,
         TmpSecretKey: data.Credentials.TmpSecretKey,
@@ -35,7 +37,7 @@ export function useUpload() {
   const upLoadFile = async (
     dir: string,
     file: File,
-    ProgressCallBack: (progress: number) => void,
+    ProgressCallBack: (progress: number) => void = () => {},
   ) => {
     const Key = await uuidFilePath(dir, file.name);
     const res: any = await cosSdk.sliceUploadFile({
@@ -57,7 +59,7 @@ export function useUpload() {
     if (taskIndex !== -1) {
       taskList.value.splice(taskIndex, 1);
     }
-    return CdnUrl === '' ? `https://${res.Location}` : `${CdnUrl}/${res.Key}`;
+    return `https://${res.Location}`;
   };
 
   const upLoadContent = async (
@@ -74,7 +76,7 @@ export function useUpload() {
         ProgressCallBack(progressData.percent * 100);
       },
     });
-    return CdnUrl === '' ? `https://${res.Location}` : `${CdnUrl}/${res.Key}`;
+    return `https://${res.Location}`;
   };
 
   const upLoadCancel = async (file: File) => {

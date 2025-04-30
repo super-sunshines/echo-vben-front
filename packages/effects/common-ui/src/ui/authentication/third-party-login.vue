@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MdiGithub, MdiGoogle, MdiQqchat, MdiWechat } from '@vben/icons';
+import { SvgWorkWechatLogoIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
 import { VbenIconButton } from '@vben-core/shadcn-ui';
@@ -7,6 +7,10 @@ import { VbenIconButton } from '@vben-core/shadcn-ui';
 defineOptions({
   name: 'ThirdPartyLogin',
 });
+
+const onWorkWechatLoginBtnClick = () => {
+  window.console.log('work wechat login');
+};
 </script>
 
 <template>
@@ -20,7 +24,10 @@ defineOptions({
     </div>
 
     <div class="mt-4 flex flex-wrap justify-center">
-      <VbenIconButton class="mb-3">
+      <VbenIconButton class="mb-3" @click="onWorkWechatLoginBtnClick">
+        <SvgWorkWechatLogoIcon />
+      </VbenIconButton>
+      <!-- <VbenIconButton class="mb-3">
         <MdiWechat />
       </VbenIconButton>
       <VbenIconButton class="mb-3">
@@ -31,7 +38,7 @@ defineOptions({
       </VbenIconButton>
       <VbenIconButton class="mb-3">
         <MdiGoogle />
-      </VbenIconButton>
+      </VbenIconButton> -->
     </div>
   </div>
 </template>

@@ -4,14 +4,7 @@ import type { SysRoleApi } from '#/api/core/system/role';
 
 import { Page } from '@vben/common-ui';
 
-import {
-  NButton,
-  NButtonGroup,
-  NCard,
-  NPopconfirm,
-  NSpace,
-  NTag,
-} from 'naive-ui';
+import { NButton, NButtonGroup, NPopconfirm, NSpace, NTag } from 'naive-ui';
 
 import { message } from '#/adapter/naive';
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
@@ -67,7 +60,6 @@ const gridOptions: VxeGridProps<SysRoleApi.RoleRecord> = {
     },
   },
 };
-
 const [Grid, gridApi] = useVbenVxeGrid({ gridOptions });
 </script>
 <template>
@@ -77,6 +69,10 @@ const [Grid, gridApi] = useVbenVxeGrid({ gridOptions });
     title="系统权限管理"
   >
     <template #extra>
+      <SysRoleOperate
+        ref="sysRoleOperateRef"
+        @update:success="() => gridApi.reload()"
+      />
       <NSpace>
         <NButton type="primary" @click="() => sysRoleOperateRef?.add()">
           新增角色
@@ -84,35 +80,29 @@ const [Grid, gridApi] = useVbenVxeGrid({ gridOptions });
       </NSpace>
     </template>
 
-    <NCard class="h-full pr-3">
-      <SysRoleOperate
-        ref="sysRoleOperateRef"
-        @update:success="() => gridApi.reload()"
-      />
-      <Grid>
-        <template #action="{ row }">
-          <NButtonGroup size="small">
-            <NButton
-              tertiary
-              type="primary"
-              @click="() => sysRoleOperateRef?.edit(row.id)"
-            >
-              编辑
-            </NButton>
-            <NPopconfirm @positive-click="() => {}">
-              <template #trigger>
-                <NButton tertiary type="error"> 删除 </NButton>
-              </template>
-              确认删除吗?
-            </NPopconfirm>
-          </NButtonGroup>
-        </template>
-        <template #enable="{ row }">
-          <NTag :type="row.enableStatus ? 'success' : 'error'">
-            {{ row.enableStatus ? '启用' : '禁用' }}
-          </NTag>
-        </template>
-      </Grid>
-    </NCard>
+    <Grid auto-content-height>
+      <template #action="{ row }">
+        <NButtonGroup size="small">
+          <NButton
+            tertiary
+            type="primary"
+            @click="() => sysRoleOperateRef?.edit(row.id)"
+          >
+            编辑
+          </NButton>
+          <NPopconfirm @positive-click="() => {}">
+            <template #trigger>
+              <NButton tertiary type="error"> 删除 </NButton>
+            </template>
+            确认删除吗?
+          </NPopconfirm>
+        </NButtonGroup>
+      </template>
+      <template #enable="{ row }">
+        <NTag :type="row.enableStatus ? 'success' : 'error'">
+          {{ row.enableStatus ? '启用' : '禁用' }}
+        </NTag>
+      </template>
+    </Grid>
   </Page>
 </template>

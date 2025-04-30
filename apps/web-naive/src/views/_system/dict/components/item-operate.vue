@@ -14,9 +14,9 @@ import {
 } from '#/api/core/system/dict';
 import XSkeleton from '#/components/XSkeleton.vue';
 import { SysDisableTagProp, tagPropToOptions } from '#/constants';
+import { SysDictCodeEnum } from '#/constants/dict.enum';
 import useBoolean from '#/hook/use-boolean';
 
-import { SysDictCodeEnum } from '#/constants/dict.enum';
 import { SysDictValueType } from '../const';
 
 // 定义emit事件及其参数类型
@@ -31,8 +31,9 @@ const model = ref<SysDictApi.SysDictRecord>({
   module: 0,
   valueType: 1,
   name: '',
-  status: 0,
+  enableStatus: 1,
   children: [],
+  regular: '^(100|[1-9][0-9]?)$',
 });
 const { bool: modelLoad, setBool: setModelLoad } = useBoolean(false);
 const operateId = ref(0);
@@ -46,8 +47,9 @@ const resetModel = () => {
     valueType: 1,
     module: 0,
     name: '',
-    status: 0,
+    enableStatus: 1,
     children: [],
+    regular: '^(100|[1-9][0-9]?)$',
   };
 };
 
@@ -114,7 +116,12 @@ const [Form, formApi] = useVbenForm({
         },
       },
     },
-
+    {
+      component: 'Input',
+      fieldName: 'regular',
+      label: '正则表达式',
+      rules: 'required',
+    },
     {
       component: 'Input',
       componentProps: {
@@ -130,7 +137,7 @@ const [Form, formApi] = useVbenForm({
       componentProps: {
         options: tagPropToOptions(SysDisableTagProp),
       },
-      fieldName: 'status',
+      fieldName: 'enableStatus',
       label: '启用状态',
       rules: 'required',
     },

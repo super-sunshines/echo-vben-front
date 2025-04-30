@@ -42,16 +42,19 @@
     "@vben/types": "workspace:*",
     "@vben/utils": "workspace:*",
     "@vueuse/core": "catalog:",
+    "@wecom/jssdk": "catalog:",
     "cos-js-sdk-v5": "catalog:",
     "dayjs": "catalog:",
     "naive-ui": "catalog:",
     "pinia": "catalog:",
+    "qs": "catalog:",
     "uuid": "catalog:",
     "vue": "catalog:",
     "vue-router": "catalog:"
   },
   "devDependencies": {
     "unplugin-auto-import": "catalog:",
-    "unplugin-vue-components": "catalog:"
+    "unplugin-vue-components": "catalog:",
+    "vite-plugin-mkcert": "^1.17.8"
   }
 }
